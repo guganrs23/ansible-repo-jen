@@ -3,6 +3,9 @@
   hosts: apache
   become: yes
 
+  vars:
+    html_source_path: "/var/lib/jenkins/workspace/terra-an-jen/html/"
+
   tasks:
     - name: Install Apache
       apt:
@@ -16,9 +19,9 @@
         state: started
         enabled: yes
 
-    - name: Copy website files
+    - name: Copy website files from HTML repo
       copy:
-        src: html/
+        src: "{{ html_source_path }}"
         dest: /var/www/html/
         owner: www-data
         group: www-data
@@ -28,6 +31,9 @@
 - name: Configure Nginx servers
   hosts: nginx
   become: yes
+
+  vars:
+    html_source_path: "/var/lib/jenkins/workspace/terra-an-jen/html/"
 
   tasks:
     - name: Install Nginx
@@ -42,9 +48,9 @@
         state: started
         enabled: yes
 
-    - name: Copy website files
+    - name: Copy website files from HTML repo
       copy:
-        src: html/
+        src: "{{ html_source_path }}"
         dest: /var/www/html/
         owner: www-data
         group: www-data
